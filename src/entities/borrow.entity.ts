@@ -14,7 +14,7 @@ export class Borrow {
   member: Member;
 
   @Column()
-  borrowDate: Date;
+  borrowedDate: Date;
 
   @Column({ nullable: true })
   returnDate: Date;

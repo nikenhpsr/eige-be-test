@@ -40,7 +40,7 @@ export class BorrowService {
     const borrow = new Borrow();
     borrow.member = member;
     borrow.book = book;
-    borrow.borrowDate = new Date();
+    borrow.borrowedDate = borrow.borrowedDate || new Date();
 
     await this.borrowRepository.save(borrow);
     await this.bookService.updateStock(book, -1);
@@ -63,7 +63,7 @@ export class BorrowService {
     }
 
     const now = new Date();
-    const borrowDuration = now.getTime() - borrow.borrowDate.getTime();
+    const borrowDuration = now.getTime() - borrow.borrowedDate.getTime();
     const borrowDays = Math.ceil(borrowDuration / (1000 * 3600 * 24));
 
     borrow.returnDate = now;
