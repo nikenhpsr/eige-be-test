@@ -27,6 +27,10 @@ export class MembersService {
     await this.memberRepository.save(member);
   }
 
+  async save(member: Member): Promise<void> {
+    await this.memberRepository.save(member);
+  }
+
   async setPenalty(member: Member, days: number): Promise<void> {
     const penaltyUntil = new Date();
     penaltyUntil.setDate(penaltyUntil.getDate() + days);

@@ -33,7 +33,7 @@ export class BorrowService {
       throw new BadRequestException('Book is not available');
     }
 
-    if (member.penaltyUntil && member.penaltyUntil > new Date()) {
+    if (member.penaltyUntil && member.penaltyUntil < new Date()) {
       throw new BadRequestException('Member is currently penalized');
     }
 
@@ -42,9 +42,14 @@ export class BorrowService {
     borrow.book = book;
     borrow.borrowedDate = borrow.borrowedDate || new Date();
 
+    const penaltyUntil = new Date(borrow.borrowedDate);
+    penaltyUntil.setDate(penaltyUntil.getDate() + 7);
+    member.penaltyUntil = penaltyUntil;
+
     await this.borrowRepository.save(borrow);
     await this.bookService.updateStock(book, -1);
     await this.memberService.updateBorrowedBooks(member, 1);
+    await this.memberService.save(member);
   }
 
   async returnBook(returnBookDto: ReturnBookDto): Promise<void> {
